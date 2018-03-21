@@ -5,9 +5,9 @@ use App\Answer;
 use App\Question;
 use App\Result;
 use Log;
+use Excel;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use Maatwebsite\Excel\Excel;
 
 class TestingController extends Controller {
 
@@ -47,10 +47,25 @@ class TestingController extends Controller {
         return redirect('testing');
     }
 
-    public function export() {
-        return 'export';
-        //Excel::store(new InvoicesExport(2018), 'invoices.xlsx', 's3');
-        //return Excel::download(new Export);
+    public function export($type = 'xlsx') {
+        $data = [];
+        $data[] = ['შეკითხვა', 'თქვენი პასუხი', 'სწორი პასუხი', 'ქულა'];
+        $results = Result::all();
+        $total_score = 0;
+
+        foreach($results as $result) {
+            if ($result->score == 1)
+                $total_score++;
+            $data[] = [$result->question, $result->answer, $result->correct_answer, $result->score];
+        }
+
+        $data[] = [count($results) . ' შესაძლებელი ქულიდან თქვენ დააგროვეთ ' . $total_score . ' ქულა'];
+
+        return Excel::create('results', function($excel) use ($data) {
+            $excel->sheet('results_sheet', function($sheet) use ($data) {
+                $sheet->fromArray($data, null, null, true, false);
+            });
+        })->download($type);
     }
 
 }
