@@ -1,7 +1,7 @@
 <?php
 Route::get('/', 'QuestionController@index');
 Route::get('questions/{id?}', 'QuestionController@index');
-Route::post('save', 'QuestionController@save');
+Route::post('questions/save', 'QuestionController@save');
 Route::delete('question/{question}', 'QuestionController@delete');
 
 Route::get('testing', 'TestingController@index');

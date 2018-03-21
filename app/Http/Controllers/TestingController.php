@@ -23,7 +23,6 @@ class TestingController extends Controller {
         $question_id = $request->input('question_id');
         $answer_id = $request->input('answer_id');
 
-        // Log::info($question_id.":::".$answer_id);
         $question = Question::find($question_id);
         $question->finished = 1;
         $question->save();
@@ -44,6 +43,7 @@ class TestingController extends Controller {
     public function reset() {
         Question::where(['finished' => 1])->update(['finished' => 0]);
         Result::truncate();
+
         return redirect('testing');
     }
 

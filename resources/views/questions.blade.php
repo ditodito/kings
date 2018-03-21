@@ -1,12 +1,22 @@
 @extends('layouts.master')
 
-@section('title', 'კითხვების ჩამონათვალი')
+@section('title', 'შეკითხვები')
 
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-md-5 form-group">
-                {{ Form::open(['url' => 'save', 'method' => 'post', 'class' => 'form-horizontal']) }}
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                {{ Form::open(['url' => 'questions/save', 'method' => 'post', 'class' => 'form-horizontal']) }}
                     {{ Form::hidden('id', isset($model->id) ? $model->id : null) }}
                     <div class="form-group">
                         {{ Form::label('question', 'შეკითხვა', ['class' => 'col-md-3 control-label']) }}
@@ -17,7 +27,7 @@
                     <div class="form-group">
                         {{ Form::label('answer1', 'პასუხი 1', ['class' => 'col-md-3 control-label']) }}
                         <div class="col-md-8">
-                            {{ Form::text('answers[]', isset($model->answers[0]->answer) ? $model->answers[0]->answer : null, ['class' => 'form-control', 'id' => 'answer1']) }}
+                            {{ Form::text('answers1', isset($model->answers[0]->answer) ? $model->answers[0]->answer : null, ['class' => 'form-control', 'id' => 'answer1']) }}
                         </div>
                         <div class="col-md-1">
                             {{ Form::radio('correct', 0, isset($model->answers[0]->correct) && $model->answers[0]->correct == 1 ? true : false) }}
@@ -26,7 +36,7 @@
                     <div class="form-group">
                         {{ Form::label('answer2', 'პასუხი 2', ['class' => 'col-md-3 control-label']) }}
                         <div class="col-md-8">
-                            {{ Form::text('answers[]', isset($model->answers[1]->answer) ? $model->answers[1]->answer : null, ['class' => 'form-control', 'id' => 'answer2']) }}
+                            {{ Form::text('answers2', isset($model->answers[1]->answer) ? $model->answers[1]->answer : null, ['class' => 'form-control', 'id' => 'answer2']) }}
                         </div>
                         <div class="col-md-1">
                             {{ Form::radio('correct', 1, isset($model->answers[1]->correct) && $model->answers[1]->correct == 1 ? true : false) }}
@@ -35,7 +45,7 @@
                     <div class="form-group">
                         {{ Form::label('answer3', 'პასუხი 3', ['class' => 'col-md-3 control-label']) }}
                         <div class="col-md-8">
-                            {{ Form::text('answers[]', isset($model->answers[2]->answer) ? $model->answers[2]->answer : null, ['class' => 'form-control', 'id' => 'answer3']) }}
+                            {{ Form::text('answers3', isset($model->answers[2]->answer) ? $model->answers[2]->answer : null, ['class' => 'form-control', 'id' => 'answer3']) }}
                         </div>
                         <div class="col-md-1">
                             {{ Form::radio('correct', 2, isset($model->answers[2]->correct) && $model->answers[2]->correct == 1 ? true : false) }}
@@ -44,7 +54,7 @@
                     <div class="form-group">
                         {{ Form::label('answer4', 'პასუხი 3', ['class' => 'col-md-3 control-label']) }}
                         <div class="col-md-8">
-                            {{ Form::text('answers[]', isset($model->answers[3]->answer) ? $model->answers[3]->answer : null, ['class' => 'form-control', 'id' => 'answer4']) }}
+                            {{ Form::text('answers4', isset($model->answers[3]->answer) ? $model->answers[3]->answer : null, ['class' => 'form-control', 'id' => 'answer4']) }}
                         </div>
                         <div class="col-md-1">
                             {{ Form::radio('correct', 3, isset($model->answers[3]->correct) && $model->answers[3]->correct == 1 ? true : false) }}
@@ -87,6 +97,8 @@
                             </tr>
                         @endforeach
                     </table>
+                @else
+                    <p class="text-danger text-center">შეკითხვები არ არის!</p>
                 @endif
             </div>
         </div>
